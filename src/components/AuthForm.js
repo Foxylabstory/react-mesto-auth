@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Sign = (props) => {
+const AuthForm = (props) => {
   
 
   const handleSubmit = (event) => {
@@ -56,4 +56,4 @@ const Sign = (props) => {
   );
 };
 
-export default Sign;
+export default AuthForm;

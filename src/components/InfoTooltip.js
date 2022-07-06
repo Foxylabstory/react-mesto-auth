@@ -8,6 +8,7 @@ const InfoTooltip = (props) => {
         props.isOpen && "popup_opened"
       }`}
       id={props.name}
+      onClick={props.onClick}
     >
       <div className={`popup__container ${props.containerType}`}>
         <img className="popup__img" alt="" src={ props.isOk ? imageSuccessPath : imageErrorPath } />

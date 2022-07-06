@@ -1,6 +1,6 @@
 export default function ImagePopup(props) {
   return(
-    <div className={`popup ${props.card.link && 'popup_opened'}`} id="popup-image">
+    <div className={`popup ${props.card.link && 'popup_opened'}`} id="popup-image" onClick={props.onClick}>
     <figure className="popup__figure">
       <button
         className="popup__form-closer popup__form-closer_img"

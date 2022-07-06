@@ -18,7 +18,7 @@ export default function Card(props) {
   }
 
   return (
-    <div className="element" key={props.keyId}>
+    <div className="element">
       <div className="element__ordering">
         <img className="element__image" src={props.src} alt={props.name} onClick={handleClick} />
         {isOwn && <button className="element__delete" onClick={handleDeleteClick}></button>}

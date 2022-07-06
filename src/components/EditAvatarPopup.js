@@ -1,6 +1,6 @@
 import { createRef, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
-export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
+export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, onClick }) {
   const avatar = createRef();
 
   useEffect(() => {
@@ -23,6 +23,7 @@ export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      onClick={onClick}
     >
       <label className="popup__hidden-label" htmlFor="link-avatar">
         Ссылка на аватар

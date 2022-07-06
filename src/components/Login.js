@@ -1,11 +1,11 @@
 import Header from "./Header";
-import Sign from "./Sign";
+import AuthForm from "./AuthForm";
 
 const Login = (props) => {
   return (
     <>
       <Header link={"/sign-up"} linkText={"Регистрация"} />
-      <Sign
+      <AuthForm
         header="Вход"
         buttonText="Войти"
         hidden={true}

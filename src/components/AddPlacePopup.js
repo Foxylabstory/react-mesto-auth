@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 
-export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+export default function AddPlacePopup({ isOpen, onClose, onAddPlace, onClick }) {
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
 
@@ -37,6 +37,7 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      onClick={onClick}
     >
       <label className="popup__hidden-label" htmlFor="name-card">
         Название

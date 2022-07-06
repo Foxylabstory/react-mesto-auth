@@ -4,6 +4,7 @@ export default function PopupWithForm(props) {
     <div
       className={`popup popup_type_${props.name} ${props.isOpen && "popup_opened"}`}
       id={props.name}
+      onClick={props.onClick}
     >
       <div className={`popup__container ${props.containerType}`}>
         <h2 className="popup__header">{props.title}</h2>
@@ -12,7 +13,6 @@ export default function PopupWithForm(props) {
           id={`form-${props.name}`}
           name={props.name}
           autoComplete="on"
-          noValidate
           onSubmit={props.onSubmit}
         >
           <fieldset className="popup__fieldset">

@@ -18,7 +18,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Login from "./Login";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
-import { authorization, register, getContent } from "../utils/auth";
+import { authorization, register, checkToken } from "../utils/auth";
 
 export default function App() {
   const navigate = useNavigate();
@@ -50,6 +50,23 @@ export default function App() {
     }));
   };
 
+  const isModalWindowOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link || isInfoTooltipOpen;
+
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if(evt.key === 'Escape') {
+        closeAllPopup();
+      }
+    }
+    
+    if(isModalWindowOpen) {
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isModalWindowOpen])
+
   useEffect(() => {
     tokenCheck();
     api
@@ -70,6 +87,12 @@ export default function App() {
       });
   }, []);
 
+  const handleOverlay = (e) => {
+    if (e.target === e.currentTarget) {
+        closeAllPopup();
+    }
+  }
+
   const logOut = () => {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
@@ -78,7 +101,7 @@ export default function App() {
 
   const tokenCheck = () => {
     const jwt = localStorage.getItem("jwt");
-    getContent(jwt).then((response) => {
+    checkToken(jwt).then((response) => {
       setUserEmail(response.data.email);
       setLoggedIn(true);      
     }).then(() => navigate("/"))
@@ -92,17 +115,14 @@ export default function App() {
       .then((response) => {
         if (response.data.email) {
           setRegistrated(true);
-          setIsInfoTooltipOpen(true);
           navigate("/sign-in");
         }
       })
       .then(() => {
         setAuthorizationData({ password: "", email: "" });
       })
-      .catch((err) => {
-        setIsInfoTooltipOpen(true);
-        console.error(err);
-      });
+      .catch((err) => console.error(err))
+      .finally(() => setIsInfoTooltipOpen(true));
   };
 
   const handleLogin = () => {
@@ -152,7 +172,7 @@ export default function App() {
       .then((data) => {
         setCurrentUser(data);
       })
-      .then(closeAllPopup())
+      .then(() => closeAllPopup())
       .catch((error) => console.log(error));
   };
 
@@ -162,7 +182,7 @@ export default function App() {
       .then((data) => {
         setCurrentUser(data);
       })
-      .then(closeAllPopup())
+      .then(() => closeAllPopup())
       .catch((error) => console.log(error));
   };
 
@@ -210,7 +230,7 @@ export default function App() {
       .then((newCard) => {
         setCards([newCard, ...cards]);
       })
-      .then(closeAllPopup())
+      .then(() => closeAllPopup())
       .catch((error) => console.log(error));
   };
 
@@ -272,18 +292,21 @@ export default function App() {
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopup}
           onUpdateUser={handleUpdateUser}
+          onClick={handleOverlay}
         />
 
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopup}
           onUpdateAvatar={handleUpdateAvatar}
+          onClick={handleOverlay}
         />
 
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopup}
           onAddPlace={handleAddPlaceSubmit}
+          onClick={handleOverlay}
         />
 
         <PopupWithForm
@@ -293,9 +316,10 @@ export default function App() {
           containerType="popup__container_input_noinputs"
           isOpen={false}
           onClose={closeAllPopup}
+          onClick={handleOverlay}
         ></PopupWithForm>
 
-        <ImagePopup card={selectedCard} onClose={closeAllPopup} />
+        <ImagePopup card={selectedCard} onClose={closeAllPopup} onClick={handleOverlay} />
 
         <InfoTooltip
           isOpen={isInfoTooltipOpen}
@@ -303,6 +327,7 @@ export default function App() {
           name="info"
           containerType="infoTooltip"
           isOk={registrated}
+          onClick={handleOverlay}
         />
       </CurrentUserContext.Provider>
     </div>
